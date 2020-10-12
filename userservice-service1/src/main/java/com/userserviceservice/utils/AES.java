@@ -50,13 +50,4 @@ public class AES {
 		return null;
 	}
 
-	public static void main(String[] args) {
-		String salt = "h4R6gewBUPMnS3FZ";
-		String secret = "SDGhEh1UEkRBLJXS";
-		String val = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		String encrpyted = Base64.getEncoder().encodeToString(encrypt(val.getBytes(), secret, salt));
-		String decrpyted = new String(decrypt(Base64.getDecoder().decode(encrpyted), secret, salt));
-		System.out.println(encrpyted);
-		System.out.println(decrpyted);
-	}
 }
