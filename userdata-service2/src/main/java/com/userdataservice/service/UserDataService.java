@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -17,8 +18,11 @@ import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.userdataservice.utils.AES;
+import com.userdataservice.utils.DateUtils;
 import com.userserviceservice.model.User;
 import com.userserviceservice.model.UserDto;
 
@@ -30,6 +34,13 @@ public class UserDataService implements UserDataIF {
 	private static final String CSV_SEPARATOR = ",";
 
 	private static final String CSV = "CSV";
+	
+
+	@Value("${aes-secret-key}")
+	private String aesSecretKey;
+	
+	@Value("${aes-salt-key}")
+	private String aesSaltKey;
 
 	@Override
 	public void updateUser(User user) {
@@ -43,15 +54,9 @@ public class UserDataService implements UserDataIF {
 
 	private void updateXML(User user) {
 		File xmlFile = new File(user.getUserId() + ".xml");
-		try {
-
-			User userXml = readXmlFileForUserId(xmlFile);
-
-			if (null != userXml) {
-				writeToXML(user);
-			}
-
-		} catch (JAXBException e) {
+		if (xmlFile.exists()) {
+			writeToXML(user);
+		} else {
 			logger.info("XML file with userID : " + user.getUserId() + " is not available for update");
 		}
 	}
@@ -123,7 +128,7 @@ public class UserDataService implements UserDataIF {
 			oneLine.append(CSV_SEPARATOR);
 			oneLine.append(user.getName());
 			oneLine.append(CSV_SEPARATOR);
-			oneLine.append(user.getDateOfBirth());
+			oneLine.append(DateUtils.convertFromDateToString(user.getDateOfBirth()));
 			oneLine.append(CSV_SEPARATOR);
 			oneLine.append(user.getSalary());
 			oneLine.append(CSV_SEPARATOR);
@@ -147,18 +152,10 @@ public class UserDataService implements UserDataIF {
 			String line = "";
 			String splitBy = ",";
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(fileCsv+".csv"));
-				while ((line = br.readLine()) != null) 
-				{
-					String[] user = line.split(splitBy); 
-					UserDto userDto = new UserDto();
-					userDto.setUserId(Integer.parseInt(user[0]));
-					
-					/*
-					 * System.out.println("Employee [First Name=" + employee[0] + ", Last Name=" +
-					 * employee[1] + ", Designation=" + employee[2] + ", Contact=" + employee[3] +
-					 * ", Salary= " + employee[4] + ", City= " + employee[5] + "]");
-					 */
+				BufferedReader br = new BufferedReader(new FileReader(fileCsv));
+				while ((line = br.readLine()) != null) {
+					return populateUserDto(line, splitBy);
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -181,15 +178,29 @@ public class UserDataService implements UserDataIF {
 		return null;
 	}
 
+	private UserDto populateUserDto(String line, String splitBy) {
+		String[] user = line.split(splitBy);
+		UserDto userDto = new UserDto();
+		userDto.setUserId(encrypt(user[0]));
+		userDto.setName(encrypt(user[1]));
+		userDto.setDateOfBirth(encrypt(user[2]));
+		userDto.setSalary(encrypt(user[3]));
+		userDto.setAge(encrypt(user[4]));
+		return userDto;
+	}
+
 	private UserDto converToDto(User user) {
-		// TODO Auto-generated method stub
 		UserDto dto = new UserDto();
-		dto.setUserId(user.getUserId());
-		dto.setAge(user.getAge());
-		dto.setName(user.getName());
-		dto.setSalary(user.getSalary());
-		dto.setDateOfBirth(user.getDateOfBirth());
+		dto.setUserId(encrypt(String.valueOf(user.getUserId())));
+		dto.setAge(encrypt(String.valueOf(user.getAge())));
+		dto.setName(encrypt(String.valueOf(user.getName())));
+		dto.setSalary(encrypt(String.valueOf(user.getSalary())));
+		dto.setDateOfBirth(encrypt(String.valueOf(user.getDateOfBirth())));
 		return dto;
+	}
+	
+	private String encrypt(String encrpyValue) {
+		return Base64.getEncoder().encodeToString(AES.encrypt(encrpyValue.getBytes(), aesSecretKey, aesSaltKey));
 	}
 
 }

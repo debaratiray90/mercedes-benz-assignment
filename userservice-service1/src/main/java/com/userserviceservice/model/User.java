@@ -4,6 +4,9 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class User {
 
@@ -13,7 +16,8 @@ public class User {
 	@NotBlank(message = "Name is mandatory")
 	private String name;
 
-	@NotBlank(message = "Date of birth is mandatory")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@Past
 	private Date dateOfBirth;
 
 	@NotNull(message = "Salary is mandatory")

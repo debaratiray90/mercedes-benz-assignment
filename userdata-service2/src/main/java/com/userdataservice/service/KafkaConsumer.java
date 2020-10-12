@@ -19,7 +19,7 @@ public class KafkaConsumer {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private static final String UPDATE = "UPDATE";
+	private static final String UPDATE = "Update";
 
 	@KafkaListener(topics = "user-topic")
 	public void listen(@Payload final User userDto, @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final int partition,

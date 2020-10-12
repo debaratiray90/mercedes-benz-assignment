@@ -36,17 +36,16 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateUser(@Valid @RequestBody User user, @RequestParam String fileType,
+	public void updateUser(@Valid @RequestBody User user, @RequestParam(required = true) String fileType,
 			BindingResult result) {
-		userService.updateUser(user, fileType);
-		return ResponseEntity.status(HttpStatus.OK).body("Record Updated");
+		userService.updateUser(user, fileType.toUpperCase());
 
 	}
 
 	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUser(@RequestBody @Valid User user, @RequestParam String fileType,
+	public ResponseEntity<String> saveUser(@RequestBody @Valid User user, @RequestParam(required = true) String fileType,
 			BindingResult result) {
-		userService.saveUser(user, fileType);
+		userService.saveUser(user, fileType.toUpperCase());
 		return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully!");
 
 	}

@@ -1,27 +1,34 @@
 package com.userserviceservice.model;
 
-import java.util.Date;
+import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
-@XmlRootElement
-public class UserDto {
 
-	private Integer userId;
+import com.fasterxml.jackson.annotation.JsonFormat;
+@XmlRootElement
+public class UserDto implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String userId;
 
 	private String name;
 
-	private Date dateOfBirth;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private String dateOfBirth;
 
-	private Double salary;
+	private String salary;
 
-	private Integer age;
+	private String age;
 
-
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
@@ -33,42 +40,31 @@ public class UserDto {
 		this.name = name;
 	}
 
-	public Date getDateOfBirth() {
+	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(String dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public Double getSalary() {
+	public String getSalary() {
 		return salary;
 	}
 
-	public void setSalary(Double salary) {
+	public void setSalary(String salary) {
 		this.salary = salary;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
-	public UserDto(Integer userId, String name, Date dateOfBirth, Double salary, Integer age) {
-		super();
-		this.userId = userId;
-		this.name = name;
-		this.dateOfBirth = dateOfBirth;
-		this.salary = salary;
-		this.age = age;
-	}
+
 	
-	public UserDto() {
-		
-	}
-
 
 }
