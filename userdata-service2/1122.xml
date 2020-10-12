@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user>
+    <age>30</age>
+    <dateOfBirth>2020-10-12T21:45:45.451+05:30</dateOfBirth>
+    <eventType>SAVE</eventType>
+    <fileType>XML</fileType>
+    <name>Deba</name>
+    <salary>20.2</salary>
+    <userId>1122</userId>
+</user>

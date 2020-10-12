@@ -1,0 +1,13 @@
+
+  kafka:
+    config:
+      bootstrap-address: localhost:9092
+      topic-name: user-topic
+      numPartitions: 1
+      replicationFactor: 1
+  server:
+    port : 8086
+  aes-secret-key :
+    SDGhEh1UEkRBLJXS
+  aes-salt-key :
+    h4R6gewBUPMnS3FZ    
