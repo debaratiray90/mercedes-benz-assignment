@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.userservice1.protobuf;
+option java_outer_classname = "UserMessageProtos";
+
+message SimpleMessage {
+	string name = 1;
+	string date_of_birth = 2;
+	int32 user_id = 3;
+	int32 age = 4;
+	double salary = 5;
+	
+	
+}

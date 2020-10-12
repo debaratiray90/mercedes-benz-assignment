@@ -1,0 +1,15 @@
+
+  kafka:
+    config:
+      bootstrap-address: localhost:9092
+      topic-name: user-topic
+      numPartitions: 1
+      replicationFactor: 1
+  server:
+    port : 8085
+  aes-secret-key :
+    SDGhEh1UEkRBLJXS
+  aes-salt-key :
+    h4R6gewBUPMnS3FZ  
+  user-dataservice-url :
+    http://localhost:8086/getUserDetails/   
